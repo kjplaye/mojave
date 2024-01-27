@@ -1,4 +1,4 @@
-# Mojave <small>(spiritual successor to GGobi)</small>
+# Mojave
 #### (spiritual successor to GGobi) 
 
 ## Get Mojave in Ubuntu
