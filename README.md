@@ -19,7 +19,7 @@ Typical screen shot during brushing
 ![alt text](https://github.com/kjplaye/mojave/blob/main/example_mojave.png?raw=true)
 
 ## Usage
-Please see the python doc-string for a listing of key mappings and usage examples to replicate the gallery.
+Please see the [python doc-string](https://github.com/kjplaye/mojave/blob/main/mojave.py#L21) for a listing of key mappings and usage examples to replicate the gallery.
 
 ## Backronym
 
