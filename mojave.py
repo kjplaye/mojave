@@ -18,7 +18,8 @@ def _do_mojave(queue, X, cl, window_name, my_path):
     queue.put(cl_a)
     
 def mojave(X, cl = None, window_name = 'Mojave'):
-    """
+    """Mojave - Multidimensional Orthographic Joint Analytic Visual Explorer
+
     Parameters
     ----------
     X : array_like
@@ -50,7 +51,7 @@ def mojave(X, cl = None, window_name = 'Mojave'):
        Space          : Change rotation angles
        
 
-    USAGE EXAMPLE:
+    USAGE EXAMPLE (toy):
     >>> import numpy as np
     >>> cl_in = np.random.randint(4,size = (2000))
     >>> bit = np.random.randint(2,size = (2000))
@@ -61,6 +62,15 @@ def mojave(X, cl = None, window_name = 'Mojave'):
     >>> N = np.random.normal(size = (2000,4))*0.03
     >>> D = V[cl_in] + np.array([X,Y,np.zeros(2000),bit]).T + N
     >>> cl_out = mojave(D,cl_in)
+
+    USAGE EXAMPLE (man bash):
+    >>> import subprocess
+    >>> import numpy as np
+    >>> x = subprocess.check_output(["man", "bash"], text=True)
+    >>> y = np.frombuffer(x.encode("utf-8"), dtype=np.uint8)
+    >>> B = [y[i:i+40] for i in range(0,len(y) - 40,40)]
+    >>> U,D,V = np.linalg.svd(B,0)
+    >>> mojave(U)
     """
     X0 = np.array(X)
     if X0.shape[0] < X0.shape[1]:
