@@ -1,5 +1,5 @@
 # Mojave
-#### (spiritual successor to GGobi) 
+* spiritual successor to GGobi 
 
 ## Get Mojave in Ubuntu
 
