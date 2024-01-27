@@ -1,6 +1,6 @@
 # Mojave
 * spiritual successor to GGobi 
-
+---
 ## Get Mojave in Ubuntu
 
 Currently creating Ubuntu package...stay tuned.
