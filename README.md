@@ -1,9 +1,13 @@
-# Mojave 
-#### (spiritual successor to GGobi) 
-
-## Get Mojave
+# Mojave
+* spiritual successor to GGobi 
+---
+## Get Mojave in Ubuntu
 
 Currently creating Ubuntu package...stay tuned.
+
+## Get Mojave from source
+
+Git clone this repo, run `make`, and add `mojave.py` path to `PYTHONPATH`.
 
 ## Gallery
 Rotation of PCA results from 40 long strings picked out of "man bash" output. 
