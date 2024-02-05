@@ -63,7 +63,7 @@ def mojave(X, cl = None, window_name = 'Mojave'):
     >>> D = V[cl_in] + np.array([X,Y,np.zeros(2000),bit]).T + N
     >>> cl_out = mojave(D,cl_in)
 
-    USAGE EXAMPLE (man bash):
+    USAGE EXAMPLE (man bash I):
     >>> import subprocess
     >>> import numpy as np
     >>> x = subprocess.check_output(["man", "bash"], text=True)
@@ -71,6 +71,32 @@ def mojave(X, cl = None, window_name = 'Mojave'):
     >>> B = [y[i:i+40] for i in range(0,len(y) - 40,40)]
     >>> U,D,V = np.linalg.svd(B,0)
     >>> mojave(U)
+
+    USAGE EXAMPLE (man bash II):
+    >>> import subprocess
+    >>> import numpy as np
+    >>> from collections import Counter
+    >>> from mojave import mojave
+    >>> stop_word_cnt = 100
+    >>> min_word_cnt = 30
+    >>> word_step = 1
+    >>> word_window = 10
+    >>> min_word_occur = 3
+    >>> man_bash = subprocess.check_output(["man", "bash"], text=True)
+    >>> W = man_bash.replace('\n','').split(' ') 
+    >>> C = Counter(W)
+    >>> S = {e for e in C if C[e] < stop_word_cnt and C[e]>=min_word_cnt}
+    >>> SL = sorted(list(S))
+    >>> SI = {SL[i]:i for i in range(len(SL))}        
+    >>> X = [[SI[x] for x in W[i:i+word_window] if x in SI] for i in range(0,len(W),word_step)]
+    >>> def f(L):
+    >>>     x = np.zeros(len(S))
+    >>>     for e in L:
+    >>>         x[e] += 1
+    >>>     return x
+    >>> X0 = [f(x) for x in X if len(x) >= min_word_occur]
+    >>> [U,D,V] = np.linalg.svd(X0,0)
+    >>> cl = mojave(U[:,:20])
     """
     X0 = np.array(X)
     if X0.shape[0] < X0.shape[1]:
