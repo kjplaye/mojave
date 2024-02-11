@@ -743,12 +743,30 @@ void draw_points(int num_data, double (*data)[dim], int32_t * color, int32_t * h
 	      }
 	    // Draw grid
 	    // TODO - fix this, it currently doesn't display.
-	    for(int x=0;x<SCREEN_WIDTH[POINT_SCREEN];x++)
-	      point(POINT_SCREEN, x, j * SCREEN_HEIGHT[POINT_SCREEN] / xy_cnt)
-		= GRID_COLOR;
-	    for(int y=0;y<SCREEN_HEIGHT[POINT_SCREEN];y++)
-	      point(POINT_SCREEN, i * SCREEN_WIDTH[POINT_SCREEN] / xy_cnt, y)
-		= GRID_COLOR;	
+	    SDL_SetRenderDrawColor(renderer[POINT_SCREEN],
+				   (GRID_COLOR >> 16) & 0xff,
+				   (GRID_COLOR >> 8) & 0xff,
+				   (GRID_COLOR >> 0) & 0xff,
+				   255);
+	    // Horizontal lines.
+            SDL_Rect hline = {0,j * SCREEN_HEIGHT[POINT_SCREEN] / xy_cnt,
+			     SCREEN_WIDTH[POINT_SCREEN],1};	   
+	    SDL_RenderFillRect(renderer[POINT_SCREEN], &hline);
+	    // Vertical lines.
+            SDL_Rect vline = {i * SCREEN_HEIGHT[POINT_SCREEN] / xy_cnt,0,
+			      1,SCREEN_HEIGHT[POINT_SCREEN]};	   
+	    SDL_RenderFillRect(renderer[POINT_SCREEN], &vline);
+	    
+	    //	    for(int x=0;x<SCREEN_WIDTH[POINT_SCREEN];x++)
+	    //	      point(POINT_SCREEN, x, j * SCREEN_HEIGHT[POINT_SCREEN] / xy_cnt)
+	    //		= GRID_COLOR;
+	    //	    for(int y=0;y<SCREEN_HEIGHT[POINT_SCREEN];y++)
+	    //	      point(POINT_SCREEN, i * SCREEN_WIDTH[POINT_SCREEN] / xy_cnt, y)
+	    //	      = GRID_COLOR;
+
+	    
+	    SDL_SetRenderDrawColor(renderer[POINT_SCREEN], 0,0,0,255); 
+
 	  }
     }
   else
