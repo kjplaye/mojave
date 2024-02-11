@@ -341,8 +341,9 @@ void xy_transform(double * data_point, double * out_x, double * out_y,
     dx = 0.5 * SCREEN_WIDTH[POINT_SCREEN] / xy_cnt;
   if (dy > 0.5 * SCREEN_WIDTH[POINT_SCREEN] / xy_cnt)
     dy = 0.5 * SCREEN_WIDTH[POINT_SCREEN] / xy_cnt;
-  *out_x = x0 + dx;
-  *out_y = y0 + dy;
+  
+  *out_x = y0 + dx;
+  *out_y = x0 + dy;
 }
 
 
@@ -732,16 +733,16 @@ void draw_points(int num_data, double (*data)[dim], int32_t * color, int32_t * h
       for(int i=0;i<xy_cnt;i++)
 	for(int j=0;j<xy_cnt;j++)
 	  {
-	    if (i==j) continue;
 	    // Draw points
 	    for(int k=0;k<num_data;k+=decimation[decimation_mode])
 	      {
 		if (hide[k]) continue;
 		double x,y;
-		xy_transform(data[k], &x, &y, i, j, xy_dim, xy_cnt);
+		xy_transform(data[k], &x, &y, i, j, xy_dim, xy_cnt);		
 		draw_point(x,y,get_color(color[k]));
 	      }
 	    // Draw grid
+	    // TODO - fix this, it currently doesn't display.
 	    for(int x=0;x<SCREEN_WIDTH[POINT_SCREEN];x++)
 	      point(POINT_SCREEN, x, j * SCREEN_HEIGHT[POINT_SCREEN] / xy_cnt)
 		= GRID_COLOR;
