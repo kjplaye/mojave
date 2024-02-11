@@ -732,6 +732,7 @@ void draw_points(int num_data, double (*data)[dim], int32_t * color, int32_t * h
       for(int i=0;i<xy_cnt;i++)
 	for(int j=0;j<xy_cnt;j++)
 	  {
+	    if (i==j) continue;
 	    // Draw points
 	    for(int k=0;k<num_data;k+=decimation[decimation_mode])
 	      {

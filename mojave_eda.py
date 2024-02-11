@@ -4,7 +4,6 @@ import multiprocessing as mp
 import numpy as np
 import os
 
-
 my_path = os.path.dirname(os.path.abspath(__file__))
 _mojave = cdll.LoadLibrary(my_path + '/_mojave.so')
 
