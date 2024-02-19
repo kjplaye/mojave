@@ -119,6 +119,7 @@
 #define MAX_POINT_SIZE 16
 #define POINT_SIZE_STEP 0.75
 #define MAX_DECIMATION_MODE 4
+#define XY_BINS 100
 
 #define SQR(x) ((x)*(x))
 #define LCG(x) ((134775813 * (x) + 2531011) & 0xffffff)
@@ -719,6 +720,100 @@ void draw_point(int x, int y, unsigned c)
   SDL_RenderCopy(renderer[POINT_SCREEN], point_texture, NULL, &dst_rect);
 }
 
+void draw_xx_plot(int num_all_data, double (*data)[dim], int32_t * color,
+		  int32_t * hide, uint32_t i, int * xy_dim, uint32_t xy_cnt)
+{
+  uint32_t num_data = 0;
+  for(int k=0;k<num_all_data;k++) num_data+=!hide[k];
+  uint64_t sort_cb[num_data];
+
+  // Create and sort color/bin.
+  uint64_t index = 0;
+  for (int k=0; k<num_all_data;k++)
+    {
+      // Check if valid.
+      if (hide[k]) continue;
+
+      // Get x value.
+      double x;
+      xy_transform(data[k], &x, &x, i, i, xy_dim, xy_cnt);
+
+      // Get bin from x.
+      double bin_float = (x - i * SCREEN_WIDTH[POINT_SCREEN] / xy_cnt);
+      bin_float *= (double)XY_BINS * xy_cnt / SCREEN_WIDTH[POINT_SCREEN];
+      uint32_t bin;      
+      if (bin_float < 0) bin = 0;
+      else if (bin_float >= XY_BINS) bin = XY_BINS - 1;
+      else bin = bin_float;
+      
+      // Record color bin.
+      sort_cb[index++] = ((uint64_t)get_color(color[k]) << 32) ^ bin;
+    }
+  qsort(sort_cb, num_data, sizeof(uint64_t), &cmp_int64);
+  
+  // Create counts.
+  // Count total number of colors.
+  uint32_t color_count = 1;
+  for(int k=1;k<num_data;k++)
+    color_count += (sort_cb[k-1] >> 32) != (sort_cb[k] >> 32);
+  
+  // Prepare to count colors and bins (cb).
+  uint32_t cb_count[color_count][XY_BINS];
+  uint32_t c_value[color_count];
+  for(int c=0;c<color_count;c++)
+    for(int b=0;b<XY_BINS;b++)
+      cb_count[c][b] = 0;
+  
+  // Run through counting colors and bins (cb_count).
+  // Also store color values (c_value).
+  uint32_t cur_color_val = sort_cb[0] >> 32;
+  uint32_t cur_color_ind = 0;
+  for(int k=0;k<num_data;k++)
+    {
+      if (k && (sort_cb[k-1] >> 32) != (sort_cb[k] >> 32))
+	{
+	  cur_color_val = sort_cb[k] >> 32;
+	  cur_color_ind++;
+	}
+      uint32_t bin_num = sort_cb[k] & 0xffffffffUL;
+      cb_count[cur_color_ind][bin_num]++;
+      c_value[cur_color_ind] = cur_color_val;
+    }
+  
+  // Find maximum count.
+  uint32_t max_count = 1;
+  for(int c=0;c<color_count;c++)
+    for(int b=0;b<XY_BINS;b++)
+      {
+	if (cb_count[c][b] > max_count) max_count = cb_count[c][b];
+      }	      
+  
+  // Draw bars.
+  uint32_t x0 = SCREEN_WIDTH[POINT_SCREEN] * i / xy_cnt;
+  uint32_t y0 = SCREEN_HEIGHT[POINT_SCREEN] * (i+1) / xy_cnt;
+  uint32_t bin_x[XY_BINS + 1];
+  for(int b=0;b<XY_BINS + 1;b++)
+    bin_x[b] = x0 + b * SCREEN_WIDTH[POINT_SCREEN] / (XY_BINS * xy_cnt);
+  for(int c=0;c<color_count;c++)
+    for(int b=0;b<XY_BINS;b++)
+      {
+	uint32_t bx = bin_x[b];
+	uint32_t bw = bin_x[b+1] - bx;
+	uint32_t bh = cb_count[c][b] * SCREEN_HEIGHT[POINT_SCREEN]
+	  / (max_count * xy_cnt);
+	uint32_t by = y0  - bh;
+	SDL_Rect bar = {bx, by, bw, bh};
+ 	uint32_t color_value = c_value[c];
+	int r = gamma_map[(color_value>>16) & 0xff];
+	int g = gamma_map[(color_value>>8) & 0xff];
+	int b = gamma_map[(color_value>>0) & 0xff];
+	SDL_SetRenderDrawBlendMode(renderer[POINT_SCREEN], SDL_BLENDMODE_ADD);
+	SDL_SetRenderDrawColor(renderer[POINT_SCREEN],r,g,b,255);
+	SDL_RenderFillRect(renderer[POINT_SCREEN], &bar);
+	SDL_SetRenderDrawColor(renderer[POINT_SCREEN], 0,0,0,255); 
+      }
+}
+
 // Draws the main view - points window
 void draw_points(int num_data, double (*data)[dim], int32_t * color, int32_t * hide)
 {
@@ -733,7 +828,15 @@ void draw_points(int num_data, double (*data)[dim], int32_t * color, int32_t * h
       for(int i=0;i<xy_cnt;i++)
 	for(int j=0;j<xy_cnt;j++)
 	  {
-	    // Draw points
+	    // Check if we are plotting against itelf.
+	    if (i==j)
+	      {
+		// If so, draw histograms (xx_plot).
+		draw_xx_plot(num_data, data, color, hide, i, xy_dim, xy_cnt);
+		continue;
+	      }
+	    
+	    // Otherwise draw points for pairs (xy_plot).
 	    for(int k=0;k<num_data;k+=decimation[decimation_mode])
 	      {
 		if (hide[k]) continue;
@@ -741,12 +844,17 @@ void draw_points(int num_data, double (*data)[dim], int32_t * color, int32_t * h
 		xy_transform(data[k], &x, &y, i, j, xy_dim, xy_cnt);		
 		draw_point(x,y,get_color(color[k]));
 	      }
-	    // Draw grid
-	    SDL_SetRenderDrawColor(renderer[POINT_SCREEN],
-				   (GRID_COLOR >> 16) & 0xff,
-				   (GRID_COLOR >> 8) & 0xff,
-				   (GRID_COLOR >> 0) & 0xff,
-				   255);
+	  }
+
+      // Draw grid
+      SDL_SetRenderDrawColor(renderer[POINT_SCREEN],
+			     (GRID_COLOR >> 16) & 0xff,
+			     (GRID_COLOR >> 8) & 0xff,
+			     (GRID_COLOR >> 0) & 0xff,
+			     255);
+      for(int i=0;i<xy_cnt;i++)
+	for(int j=0;j<xy_cnt;j++)
+	  {
 	    // Horizontal lines.
             SDL_Rect hline = {0,j * SCREEN_HEIGHT[POINT_SCREEN] / xy_cnt,
 			     SCREEN_WIDTH[POINT_SCREEN],1};	   
@@ -755,8 +863,8 @@ void draw_points(int num_data, double (*data)[dim], int32_t * color, int32_t * h
             SDL_Rect vline = {i * SCREEN_HEIGHT[POINT_SCREEN] / xy_cnt,0,
 			      1,SCREEN_HEIGHT[POINT_SCREEN]};	   
 	    SDL_RenderFillRect(renderer[POINT_SCREEN], &vline);
-	    SDL_SetRenderDrawColor(renderer[POINT_SCREEN], 0,0,0,255); 
 	  }
+      SDL_SetRenderDrawColor(renderer[POINT_SCREEN], 0,0,0,255);
     }
   else
     {
