@@ -75,7 +75,7 @@ def mojave(X, cl = None, window_name = 'Mojave'):
     >>> import subprocess
     >>> import numpy as np
     >>> from collections import Counter
-    >>> from mojave import mojave
+    >>> from mojave_eda import mojave
     >>> stop_word_cnt = 100
     >>> min_word_cnt = 30
     >>> word_step = 1
