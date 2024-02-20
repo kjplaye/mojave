@@ -1565,6 +1565,13 @@ void service_left_button_on_control(int button_x, int button_y)
     {
       if (++decimation_mode == MAX_DECIMATION_MODE) decimation_mode = 0;
     }
+  else if (button_y > SCREEN_HEIGHT[CONTROL_SCREEN] - 225 &&
+	   button_x > SCREEN_WIDTH[CONTROL_SCREEN] - 225)
+    {
+      printf("MOJAVE by Kevin Player\n");
+      printf("kjplaye@gmail.com\n");
+      printf("https://github.com/kjplaye/mojave\n\n");
+    }
 }
 
 
