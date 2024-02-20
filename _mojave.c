@@ -239,6 +239,13 @@ int max_undo_length = 1;
 int last_mouse_x = -1;
 int last_mouse_y = -1;
 
+void about()
+{
+  printf("MOJAVE by Kevin Player\n");
+  printf("kjplaye@gmail.com\n");
+  printf("https://github.com/kjplaye/mojave\n\n");
+}
+
 // SDL refresh
 void refresh(int i)
 {
@@ -1567,11 +1574,7 @@ void service_left_button_on_control(int button_x, int button_y)
     }
   else if (button_y > SCREEN_HEIGHT[CONTROL_SCREEN] - 225 &&
 	   button_x > SCREEN_WIDTH[CONTROL_SCREEN] - 225)
-    {
-      printf("MOJAVE by Kevin Player\n");
-      printf("kjplaye@gmail.com\n");
-      printf("https://github.com/kjplaye/mojave\n\n");
-    }
+    about();
 }
 
 
@@ -1761,6 +1764,9 @@ void mojave(double * data_flat, int32_t * color, int num_data, int dim_in,
 	    case SDL_KEYDOWN:
 	      switch(event.key.keysym.sym)
 		{
+		case SDLK_a:
+		  about();
+		  break;
 		case SDLK_q:
 		  flag = 0;
 		  break;

@@ -27,6 +27,7 @@ def mojave(X, cl = None, window_name = 'Mojave'):
         Cluster labels (or colors), we make up colors and glyphs.
 
     KEYS:
+       A              : About Mojave
        C              : Change color mode
        D              : Decimate
        E              : Eraser mode
