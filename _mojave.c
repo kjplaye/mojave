@@ -27,6 +27,7 @@
 #define IMAGE_SLIDER_POINT_FILE "mojave_point.bmp"
 #define IMAGE_SLIDER_INTENSITY_FILE "mojave_intensity.bmp"
 #define IMAGE_CUT_FILE "mojave_cut.bmp"
+#define IMAGE_LOGO_FILE "mojave_logo.bmp"
 
 #define TTF_FILE_FILES {"/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", "/usr/share/fonts/dejavu/DejaVuSans.ttf"}
 #define FONT_NUM_LOCATIONS 2
@@ -172,6 +173,7 @@ SDL_Surface *image_slider_zoom;
 SDL_Surface *image_slider_point;
 SDL_Surface *image_slider_intensity;
 SDL_Surface *image_cut;
+SDL_Surface *image_logo;
 
 // box is shape (dim, num-boxes)
 int (*box)[CONTROL_NUM_BOX];
@@ -285,9 +287,19 @@ void blt(SDL_Surface * surface, int screen_index, int x, int y,
 				     + ry * surface->pitch
 				     + rx * surface->format->BytesPerPixel);
 	if ((c & 0xffffff) == 0xffffff) continue;
-	point(screen_index, x + dx, y + dy) = icon_color;
+	if (icon_color)
+	  point(screen_index, x + dx, y + dy) = icon_color;
+	else
+	  {
+	    uint32_t r = (c >> 16) & 0xff;
+	    uint32_t g = (c >> 8) & 0xff;
+	    uint32_t b = (c >> 0) & 0xff;
+	    if ( r<0xe0 || g<0xe0 || b<0xe0)
+	      point(screen_index, x + dx, y + dy) = c;
+	  }
       }
 }
+
 
 // Get RGB color value from logical color label
 unsigned get_color(unsigned color_value)
@@ -467,6 +479,10 @@ void draw_controls()
 	}
     }
 
+  // Blt logo
+  blt(image_logo, CONTROL_SCREEN,
+      450, SCREEN_HEIGHT[CONTROL_SCREEN] - 225, 225, 225,0);
+  
   // Rotation mode indicator
   blt(image_rotation, CONTROL_SCREEN,
       SCREEN_WIDTH[CONTROL_SCREEN] - ROTATION_MODE_MARGIN_X
@@ -1648,10 +1664,11 @@ void mojave(double * data_flat, int32_t * color, int num_data, int dim_in,
   screen_init(POINT_SCREEN, 1, name, SCREEN_XPOS[POINT_SCREEN],
 	      SCREEN_YPOS[POINT_SCREEN]);
   SCREEN_HEIGHT[CONTROL_SCREEN] = MIN(MAX(CONTROL_Y_STEP * dim,
-					  ZOOM_GROVE_Y + ZOOM_GROVE_HEIGHT + 20),
+					  ZOOM_GROVE_Y + ZOOM_GROVE_HEIGHT
+					  + 20 + 400),
 				      SCREEN_HEIGHT[CONTROL_SCREEN]);
   screen_init(CONTROL_SCREEN, 1, control_window_name, SCREEN_XPOS[CONTROL_SCREEN],
-	      SCREEN_YPOS[CONTROL_SCREEN]);    
+	      SCREEN_YPOS[CONTROL_SCREEN]);
   screen_init(BRUSH_SCREEN, 1, brush_window_name, SCREEN_XPOS[BRUSH_SCREEN],
 	      SCREEN_YPOS[BRUSH_SCREEN]);
   SDL_SetRenderDrawColor(renderer[POINT_SCREEN],0,0,0,255);
@@ -1682,6 +1699,9 @@ void mojave(double * data_flat, int32_t * color, int num_data, int dim_in,
   sprintf(image_file, "%s/%s", mojave_path, IMAGE_CUT_FILE);
   if ((image_cut = SDL_LoadBMP(image_file))==NULL)
     ERROR("SDL_LoadBMP (cut)");
+  sprintf(image_file, "%s/%s", mojave_path, IMAGE_LOGO_FILE);
+  if ((image_logo = SDL_LoadBMP(image_file))==NULL)
+    ERROR("SDL_LoadBMP (logo)");
 
   create_point_texture();
   
