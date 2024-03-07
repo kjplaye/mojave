@@ -5,9 +5,9 @@
 
 https://youtu.be/nYdpSXOMqN8?si=69Oxh5sXusy4fk4K
 
-## Get Mojave in Ubuntu
+## Get Mojave in pip?
 
-Currently creating Ubuntu package...stay tuned.
+Currently working on this...
 
 ## Get Mojave from source
 
