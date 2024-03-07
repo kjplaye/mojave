@@ -1,6 +1,10 @@
 # Mojave
 * spiritual successor to GGobi 
 ---
+## Watch the video
+
+[https://youtu.be/nYdpSXOMqN8?si=69Oxh5sXusy4fk4K][https://youtu.be/nYdpSXOMqN8?si=69Oxh5sXusy4fk4K]
+
 ## Get Mojave in Ubuntu
 
 Currently creating Ubuntu package...stay tuned.
