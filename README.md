@@ -1,9 +1,13 @@
 # Mojave
 * spiritual successor to GGobi 
 ---
-## Get Mojave in Ubuntu
+## Watch the video
 
-Currently creating Ubuntu package...stay tuned.
+https://youtu.be/nYdpSXOMqN8?si=69Oxh5sXusy4fk4K
+
+## Get Mojave in pip?
+
+Currently working on this...
 
 ## Get Mojave from source
 
