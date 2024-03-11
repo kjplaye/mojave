@@ -19,15 +19,15 @@
 #define FPS 60
 #define FRAME_DELAY (1000 / FPS)
 
-#define IMAGE_ERASE_FILE "mojave_erase.bmp"
-#define IMAGE_PALETTE_FILE "mojave_palette.bmp"
-#define IMAGE_ROTATION_FILE "mojave_rotation.bmp"
-#define IMAGE_SLIDER_SPEED_FILE "mojave_speed.bmp"
-#define IMAGE_SLIDER_ZOOM_FILE "mojave_zoom.bmp"
-#define IMAGE_SLIDER_POINT_FILE "mojave_point.bmp"
-#define IMAGE_SLIDER_INTENSITY_FILE "mojave_intensity.bmp"
-#define IMAGE_CUT_FILE "mojave_cut.bmp"
-#define IMAGE_LOGO_FILE "mojave_logo.bmp"
+#define IMAGE_ERASE_FILE "images/mojave_erase.bmp"
+#define IMAGE_PALETTE_FILE "images/mojave_palette.bmp"
+#define IMAGE_ROTATION_FILE "images/mojave_rotation.bmp"
+#define IMAGE_SLIDER_SPEED_FILE "images/mojave_speed.bmp"
+#define IMAGE_SLIDER_ZOOM_FILE "images/mojave_zoom.bmp"
+#define IMAGE_SLIDER_POINT_FILE "images/mojave_point.bmp"
+#define IMAGE_SLIDER_INTENSITY_FILE "images/mojave_intensity.bmp"
+#define IMAGE_CUT_FILE "images/mojave_cut.bmp"
+#define IMAGE_LOGO_FILE "images/mojave_logo.bmp"
 
 #define TTF_FILE_FILES {"/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", "/usr/share/fonts/dejavu/DejaVuSans.ttf"}
 #define FONT_NUM_LOCATIONS 2
