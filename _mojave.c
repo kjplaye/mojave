@@ -29,7 +29,7 @@
 #define IMAGE_CUT_FILE "images/mojave_cut.bmp"
 #define IMAGE_LOGO_FILE "images/mojave_logo.bmp"
 
-#define TTF_FILE_FILES {"/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", "/usr/share/fonts/dejavu/DejaVuSans.ttf"}
+#define TTF_FILE_FILES {"font/DejaVuSans.ttf"}
 #define FONT_NUM_LOCATIONS 2
 
 #define POINT_SCREEN 0
