@@ -1595,9 +1595,12 @@ void mojave(double * data_flat, int32_t * color, int num_data, int dim_in,
 
   if (TTF_Init()) {fprintf(stderr, "TTF_Init error!");exit(1);}
   int font_found = 0;
+  char ttf_abs_file[MAX_STRING];
   for(int i=0;i<FONT_NUM_LOCATIONS;i++)
     {
-      font = TTF_OpenFont(ttf_file[i], 24);
+      sprintf(ttf_abs_file, "%s/%s", mojave_path, ttf_file[i]);
+
+      font = TTF_OpenFont(ttf_abs_file, 24);
       if (font != NULL)
 	{
 	  font_found = 1;
