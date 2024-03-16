@@ -746,7 +746,7 @@ void draw_point(int x, int y, unsigned c)
 void draw_xx_plot(int num_all_data, double (*data)[dim], int32_t * color,
 		  int32_t * hide, uint32_t i, int * xy_dim, uint32_t xy_cnt)
 {
-  uint32_t num_data = 0;
+  int32_t num_data = 0;
   for(int k=0;k<num_all_data;k++) num_data+=!hide[k];
   uint64_t sort_cb[num_data];
 
@@ -776,7 +776,7 @@ void draw_xx_plot(int num_all_data, double (*data)[dim], int32_t * color,
   
   // Create counts.
   // Count total number of colors.
-  uint32_t color_count = 1;
+  int32_t color_count = 1;
   for(int k=1;k<num_data;k++)
     color_count += (sort_cb[k-1] >> 32) != (sort_cb[k] >> 32);
   
@@ -1022,7 +1022,8 @@ void new_rotation_direction(unsigned seed)
   // Set up rotations Rx a pair
   int ind_1 = RANDOM(cnt);
   int ind_2 = RANDOM(cnt-1);
-  int dim1, dim2;
+  int dim1 = 0;
+  int dim2 = 0;
   if (ind_2 >= ind_1) ind_2++;
   cnt = 0;
   for(int i=0;i<dim;i++)
@@ -1043,7 +1044,8 @@ void new_rotation_direction(unsigned seed)
     {
       int ind_1 = RANDOM(cnt);
       int ind_2 = RANDOM(cnt-1);
-      int dim1, dim2;
+      int dim1 = 0;
+      int dim2 = 0;
       if (ind_2 >= ind_1) ind_2++;
       cnt = 0;
       for(int i=0;i<dim;i++)
@@ -1230,7 +1232,7 @@ void service_box_0_1(int i, int bi)
 	  box[i][!bi] = 0;
 	  A[AA(i,!bi)] = 0.0;
 	  box[j][bi] = 0;
-	  A[AA(j,bi)] = 0,0;
+	  A[AA(j,bi)] = 0.0;
 	  box[j][!bi] = 1;
 	  A[AA(j,!bi)] = 1.0;
 	}
@@ -1718,11 +1720,10 @@ void mojave(double * data_flat, int32_t * color, int num_data, int dim_in,
 
   create_point_texture();
   
-  SDL_Event event, dummy;
+  SDL_Event event;
   int flag = 1;
   int refresh_flag = 1;
   int mouse_x, mouse_y;
-  int was_delay = 0;
   unsigned frame_time = 0;
   int mouse_motion_occured = 0;
   while(flag)
