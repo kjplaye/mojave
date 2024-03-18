@@ -1,8 +1,8 @@
 import importlib.resources as resources
 import os
-import pkg_resources
 from distutils.command.build_ext import build_ext as build_ext_orig
 from setuptools import setup, Extension
+
 
 # Override to ignore the get_export_symbols for CTypes
 # Credit: https://github.com/himbeles/ctypes-example/blob/master/setup.py
@@ -24,8 +24,11 @@ class build_ext(build_ext_orig):
             return ext_name + ".so"
         return super().get_ext_filename(ext_name)
 
-sdl2_dll_dist = resources.files("sdl2dll")
-sdl2_lib_path = os.path.join(sdl2_dll_dist, "sdl2dll/dll")
+# Load the dynamic library path from pysdl2-dll.
+sdl2_lib_path = ''
+with resources.path('sdl2dll', '') as path:
+    sdl2_lib_path = path
+sdl2_lib_path = os.path.join(sdl2_lib_path, "dll")
 
 extension_mod = CTypesExtension('mojave_eda._mojave',
                        sources=['mojave_eda/_mojave.c'],
