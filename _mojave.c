@@ -127,7 +127,7 @@
 #define COLOR_HASH(x,t) LCG(LCG(x) ^ LCG(LCG((t) + 12345))  )
 #define RANDOM(n) ((int)(drand48() * (n)))
 
-#define ERROR(x) {fprintf(stderr,(x));fprintf(stderr,"\n");exit(1);}
+#define ERROR(x) {fprintf(stderr,"ERROR: ");fprintf(stderr,(x));fprintf(stderr,"\n");exit(1);}
 #define point(i, x, y) pnt[i][(int)(x) + (int)(y)*SCREEN_WIDTH[i]]
 #define AA(i, j) ((i)*dim + (j))
 #define RR(k, i, j) ((k) * dim * dim + (i) * dim + (j))
@@ -1597,7 +1597,7 @@ void mojave(double * data_flat, int32_t * color, int num_data, int dim_in,
 
   if (TTF_Init()) {fprintf(stderr, "TTF_Init error!");exit(1);}
   int font_found = 0;
-  char ttf_abs_file[MAX_STRING];
+  char ttf_abs_file[MAX_STRING*3];
   for(int i=0;i<FONT_NUM_LOCATIONS;i++)
     {
       sprintf(ttf_abs_file, "%s/%s", mojave_path, ttf_file[i]);
@@ -1614,7 +1614,7 @@ void mojave(double * data_flat, int32_t * color, int num_data, int dim_in,
 
   for(int i = 0; i < 100; i++) lrand48();
   SDL_SetHint(SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, "1");
-  
+
   dim = dim_in;  
   if (dim <= 1) return;
   double (*data)[dim] = (double (*)[dim]) data_flat;
@@ -1635,7 +1635,7 @@ void mojave(double * data_flat, int32_t * color, int num_data, int dim_in,
   int32_t (*undo_hide)[num_data] = (int32_t (*)[num_data]) undo_hide_flat;
   for(int i=0;i<num_data;i++) undo[0][i] = color[i];
   for(int i=0;i<num_data;i++) undo_hide[0][i] = 0;//hide[i];
-  
+
   // Set up initial transform (A) \in SO(dim)
   if ((A = malloc(SQR(dim) * sizeof(double))) == NULL)
     {fprintf(stderr, "Out of memory\n");exit(1);}  
@@ -1659,7 +1659,7 @@ void mojave(double * data_flat, int32_t * color, int num_data, int dim_in,
 	  Rx_inv[RR(k,y,i)] = Rx[RR(k,y,i)] = (i==y);
 	  Ry_inv[RR(k,y,i)] = Ry[RR(k,y,i)] = (i==y);
 	}
-  
+
   // Set up initial controls (boxes)
   if ((box = malloc(dim * CONTROL_NUM_BOX * sizeof(int))) == NULL)
     {fprintf(stderr, "Out of memory\n");exit(1);}
