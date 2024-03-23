@@ -5,11 +5,13 @@
 
 https://youtu.be/nYdpSXOMqN8?si=69Oxh5sXusy4fk4K
 
-## Get Mojave in pip?
+## Get Mojave from source using pip 
 
-Currently working on this...
+* sudo apt-get install libsdl2-image-dev libsdl2-ttf-dev
+* pip install numpy
+* pip install mojave-eda
 
-## Get Mojave from source
+## Get Mojave from source in github
 
 Git clone this repo, run `make`, and add `mojave.py` path to `PYTHONPATH`.
 
