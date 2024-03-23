@@ -6,7 +6,7 @@
 https://youtu.be/nYdpSXOMqN8?si=69Oxh5sXusy4fk4K
 
 ## Get Mojave from source using pip 
-We have to first install SDL headers and numpy, then we can try to install Mojave from source.
+We have to first install SDL2 headers and numpy, then we can try to install Mojave from source.
 
 * sudo apt-get install libsdl2-image-dev libsdl2-ttf-dev
 * pip install numpy
