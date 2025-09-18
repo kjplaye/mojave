@@ -111,5 +111,6 @@ def mojave(X, cl = None, window_name = 'Mojave'):
     args = [queue, X1, cl, window_name, my_path]
     p = mp.Process(target = _do_mojave, args = args)
     p.start()
+    result = queue.get()
     p.join()
-    return queue.get()
+    return result
